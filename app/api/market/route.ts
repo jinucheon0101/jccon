@@ -15,17 +15,17 @@ export async function GET(req: Request) {
 
     if (!result) return Response.json([]);
 
-    const prices = result.indicators?.quote?.[0]?.close;
-    const timestamps = result.timestamp;
+    const prices: (number | null)[] = result.indicators?.quote?.[0]?.close ?? [];
+    const timestamps: number[] = result.timestamp ?? [];
 
     if (!Array.isArray(prices) || !Array.isArray(timestamps)) {
       return Response.json([]);
     }
 
     // 🔥 null을 이전 값으로 채우기
-    let lastValid = null;
+    let lastValid: number | null = null;
 
-    const data = prices.map((price: number, i: number) => {
+    const data = prices.map((price: number | null, i: number) => {
       if (price !== null && price !== undefined) {
         lastValid = price;
       }
