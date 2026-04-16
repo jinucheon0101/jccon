@@ -10,30 +10,29 @@ export async function GET(req: Request) {
       { cache: "no-store" }
     );
 
-    const json = await res.json();
-    const result = json.chart?.result?.[0];
+    const json: any = await res.json();
+    const result = json?.chart?.result?.[0];
 
     if (!result) return Response.json([]);
 
-    const prices: (number | null)[] = result.indicators?.quote?.[0]?.close ?? [];
-    const timestamps: number[] = result.timestamp ?? [];
+    const prices = result?.indicators?.quote?.[0]?.close ?? [];
+    const timestamps = result?.timestamp ?? [];
 
     if (!Array.isArray(prices) || !Array.isArray(timestamps)) {
       return Response.json([]);
     }
 
-    // 🔥 null을 이전 값으로 채우기
-    let lastValid: number | null = null;
+    let lastValid: number = 0;
 
-    const data = prices.map((price: number | null, i: number) => {
+    const data = prices.map((price: any, i: number) => {
       if (price !== null && price !== undefined) {
         lastValid = price;
       }
 
       return {
         day: i,
-        price: lastValid ?? 0,
-        time: timestamps[i],
+        price: lastValid,
+        time: timestamps[i] ?? 0,
       };
     });
 
