@@ -13,10 +13,10 @@ export default function AssetCard({ name, data }: any) {
   const change =
     latest && prevClose ? latest - prevClose : null;
 
-  const percent =
-    latest && prevClose
-      ? ((change / prevClose) * 100).toFixed(2)
-      : null;
+const percent =
+  latest && prevClose && change !== null
+    ? ((change / prevClose) * 100).toFixed(2)
+    : null;
 
   const isUp = change !== null ? change >= 0 : true;
 
